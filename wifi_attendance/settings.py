@@ -28,6 +28,107 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s ' +
+                      '%(lineno)d:\n%(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose'
+        },
+        'file_handler_debug': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/debug.log',
+            'formatter': 'verbose'
+        },
+        'file_handler_info': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/info.log',
+            'formatter': 'verbose'
+        },
+        'file_handler_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_false'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/warning.log',
+            'formatter': 'verbose'
+        },
+        'file_handler_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/error.log',
+            'formatter': 'verbose'
+        },
+        'file_handler_critical': {
+            'level': 'CRITICAL',
+            'filters': ['require_debug_false'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/critical.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': [
+                'console',
+                'file_handler_debug',
+                'file_handler_info',
+                'file_handler_warning',
+                'file_handler_error',
+                'file_handler_critical',
+            ],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        '': {
+            'handlers': [
+                'console',
+                'file_handler_debug',
+                'file_handler_info',
+                'file_handler_warning',
+                'file_handler_error',
+                'file_handler_critical',
+            ],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+    }
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,8 +155,7 @@ ROOT_URLCONF = 'wifi_attendance.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,8 +176,11 @@ WSGI_APPLICATION = 'wifi_attendance.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'wifi_attendance_db',
+        'USER': 'wifi_attendance_user',
+        'PASSWORD': 'wifi_attendance_user_password',
+        'HOST': 'localhost'
     }
 }
 
@@ -104,18 +207,24 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
