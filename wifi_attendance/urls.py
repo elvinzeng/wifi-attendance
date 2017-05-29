@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomeView, QRView
-from users.views import LoginView
+from users.views import LoginView, AuthorizationCheckView, AuthorizeView
 
 urlpatterns = [
     url(r'^$', HomeView.as_view(), name="index"),
     url(r'^qrcode$', QRView.as_view(), name="qrcode"),
     url(r'^login$', LoginView.as_view(), name="login"),
+    url(r'^authorize$', AuthorizeView.as_view(), name="authorize"),
+    url(r'^check-auth$', AuthorizationCheckView.as_view(), name="checkAuthorization"),
     url(r'^admin/', admin.site.urls),
 ]

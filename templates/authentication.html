@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wifi attendance</title>
+</head>
+<body>
+    <p>login page</p>
+    <img src="qrcode" />
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        function checkState(){
+            $.ajax({
+                url: "/check-auth?token={{ verification_token }}",
+                type:"GET",
+                dataType: "json",
+                success: function(data, textStatus){
+                    //console.log(data);
+                    if (data.status == 2){
+                        location = "/login"
+                    }else{
+                        setTimeout(function () {
+                            checkState()
+                        }, 1000)
+                    }
+                },
+                error: function(req, textStatus, errorThrown){
+                    console.log(textStatus);
+                },
+            });
+        }
+        setTimeout(function () {
+            checkState()
+        }, 2000)
+    </script>
+</body>
+</html>

@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.views.generic import View
 import qrcode
 from cStringIO import StringIO
+import uuid
+from users.models import VerificationToken
+import datetime
 
 
 __author__ = "Elvin Zeng"
@@ -19,7 +22,9 @@ class HomeView(View):
         if request.user.is_authenticated():
             return render(request, "index.html")
         else:
-            return render(request, "login.html")
+            verification_token = str(uuid.uuid4())
+            request.session["verification_token"] = verification_token
+            return render(request, "authentication.html", locals())
 
 
 class QRView(View):
@@ -29,7 +34,14 @@ class QRView(View):
 
     def get(self, request):
         host = request.META['HTTP_HOST']
-        data = "http://" + host + "/login"
+        token = request.session.get("verification_token", str(uuid.uuid4()))
+
+        verification_token = VerificationToken()
+        verification_token.token = token
+        verification_token.expire_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+        verification_token.save()
+
+        data = "http://" + host + "/authorize?token=" + token
         img = qrcode.make(data)
         buf = StringIO()
         img.save(buf)
