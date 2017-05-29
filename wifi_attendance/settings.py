@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 Django settings for wifi_attendance project.
 
@@ -27,7 +29,7 @@ SECRET_KEY = '+uj9^=5l@kz%k2sdv5cz9%@47^#fr*vxvzi)cgl&tch1))xp6k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # 部署时记得修改下
 
 
 # logging

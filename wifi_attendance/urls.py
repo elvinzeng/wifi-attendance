@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from .views import HomeView
-from users.views import JoinView
+from .views import HomeView, QRView
+from users.views import LoginView
 
 urlpatterns = [
     url(r'^$', HomeView.as_view(), name="index"),
-    url(r'^join$', JoinView.as_view(), name="join"),
+    url(r'^qrcode$', QRView.as_view(), name="qrcode"),
+    url(r'^login$', LoginView.as_view(), name="login"),
     url(r'^admin/', admin.site.urls),
 ]
