@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
-from django.shortcuts import render
+__author__ = "Elvin Zeng"
 
-# Create your views here.
+
