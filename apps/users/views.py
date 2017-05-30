@@ -3,11 +3,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.hashers import make_password
+from django.contrib import auth
 import os
 import re
 import datetime
 import json
 
+from users.form import JoinForm
 from users.models import UserProfile
 from users.models import VerificationToken
 
@@ -46,6 +49,8 @@ class LoginView(View):
                     matched_tuple = matched_list[0]
                     if len(matched_tuple) > 0:
                         mac = matched_tuple[0]
+                        request.session["mobile_ip"] = ip
+                        request.session["mobile_mac"] = mac
                         break
 
             if 'mac' not in locals().keys():
@@ -55,9 +60,52 @@ class LoginView(View):
             user_list = UserProfile.objects.filter(username=mac)
             if len(user_list) > 0:
                 #  登录并重定向
+                user = auth.authenticate(username=mac, password=mac)
+                auth.login(request, user)
                 return redirect("/")
             else:
                 return render(request, "join.html", locals())
+
+
+class JoinView(View):
+    """
+    join view
+    """
+
+    def post(self, request):
+        form = JoinForm(request.POST)
+        if form.is_valid():
+            # 检查用户操作是否已经经过了授权
+            token = request.session.get("verification_token", "null")
+            if "null" == token:
+                error_message = "token不存在"
+                return render(request, "error.html", locals())
+            token = VerificationToken.objects.filter(token=token)
+            if len(token) != 1:
+                error_message = "指定token不存在"
+                return render(request, "error.html", locals())
+            token = token[0]
+            if not token.is_verified:
+                error_message = "当前操作尚未被授权"
+                return render(request, "error.html", locals())
+
+            hr_list = UserProfile.objects.filter(is_hr=True)
+            user_profile = UserProfile()
+            user_profile.first_name = form.data["first_name"]
+            user_profile.last_name = form.data["last_name"]
+            user_profile.email = form.data["email"]
+            user_profile.username = request.session["mobile_mac"]
+            user_profile.password = make_password(request.session["mobile_mac"])
+            if len(hr_list) > 1:
+                user_profile.is_hr = False
+            else:
+                #  第一个登记的用户将默认被设置为hr
+                user_profile.is_hr = True
+            user_profile.save()
+            msg = "手机登记成功！"
+            return render(request, "index.html", locals())
+        else:
+            return render(request, "join.html", locals())
 
 
 class AuthorizeView(View):

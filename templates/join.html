@@ -5,9 +5,18 @@
     <title>wifi attendance</title>
 </head>
 <body>
-    <p>join page</p>
-    <p>初次登录需要先登记手机</p>
-    <p>ip: {{ ip }}</p>
-    <p>mac: {{ mac }}</p>
+    <p>初次登录需要先登记手机，请提供您的基本信息。</p>
+    <p>当前手机ip: {{ request.session.mobile_ip }}</p>
+    <p>手机MAC地址: {{ request.session.mobile_mac }}</p>
+    <form action="join" method="post">
+        姓：<input type="text" name="last_name" value="{{ form.data.last_name }}" required />
+        <span>{{ form.last_name.errors }}</span><br /><br />
+        名：<input type="text" name="first_name" value="{{ form.data.first_name }}" required />
+        <span>{{ form.first_name.errors }}</span><br /><br />
+        邮箱：<input type="email" name="email" value="{{ form.data.email }}" required />
+        <span>{{ form.email.errors }}</span><br /><br />
+        {% csrf_token %}
+        <input type="submit" value="提交" />
+    </form>
 </body>
 </html>
