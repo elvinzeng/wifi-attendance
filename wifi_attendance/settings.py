@@ -145,6 +145,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'django_crontab',
+    'mobile_scanner',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
@@ -247,4 +248,4 @@ CRONJOBS = [
 ]
 
 # wifi network
-WIFI_NET_ADDR = '192.168.0.*'
+WIFI_NET_ADDR = '192.168.0.{0}'
