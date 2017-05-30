@@ -19,6 +19,7 @@ def scan_mobile():
     logger.info("network pattern: " + WIFI_NET_ADDR)
     for i in xrange(253):
         ip = WIFI_NET_ADDR.format(i + 1)
+        logger.info("scanning: " + ip)
         ping_cmd = "ping {0} -c 1".format(ip)
         ping_output = os.popen(ping_cmd).readlines()
         match = re.search(r"64\sbytes\sfrom\s{0}:".format(ip.replace(".", "\.")),

@@ -246,6 +246,8 @@ CRONJOBS = [
     ('*/1 * * * *', 'mobile_scanner.cronjob.scan_mobile', '>> '
      + os.path.join(BASE_LOG_PATH, 'cronjob.log') + ' 2>&1'),
 ]
+# prevent starting a job if an old instance of the same job is still running
+CRONTAB_LOCK_JOBS = True
 
 # wifi network
 WIFI_NET_ADDR = '192.168.0.{0}'
