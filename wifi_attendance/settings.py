@@ -18,6 +18,7 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
+BASE_LOG_PATH = os.path.join(BASE_DIR, 'logs')
 
 
 # Quick-start development settings - unsuitable for production
@@ -67,35 +68,35 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/debug.log',
+            'filename': os.path.join(BASE_LOG_PATH, 'debug.log'),
             'formatter': 'verbose'
         },
         'file_handler_info': {
             'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/info.log',
+            'filename': os.path.join(BASE_LOG_PATH, 'info.log'),
             'formatter': 'verbose'
         },
         'file_handler_warning': {
             'level': 'WARNING',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/warning.log',
+            'filename': os.path.join(BASE_LOG_PATH, 'warning.log'),
             'formatter': 'verbose'
         },
         'file_handler_error': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/error.log',
+            'filename': os.path.join(BASE_LOG_PATH, 'error.log'),
             'formatter': 'verbose'
         },
         'file_handler_critical': {
             'level': 'CRITICAL',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/critical.log',
+            'filename': os.path.join(BASE_LOG_PATH, 'critical.log'),
             'formatter': 'verbose'
         }
     },
@@ -143,6 +144,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'django_crontab',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
@@ -235,3 +237,14 @@ STATICFILES_DIRS = (
 )
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+# cronjobs
+# https://pypi.python.org/pypi/django-crontab
+CRONJOBS = [
+    ('*/1 * * * *', 'mobile_scanner.cronjob.scan_mobile', '>> '
+     + os.path.join(BASE_LOG_PATH, 'cronjob.log') + ' 2>&1'),
+]
+
+# wifi network
+WIFI_NET_ADDR = '192.168.0.*'

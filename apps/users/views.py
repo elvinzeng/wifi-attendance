@@ -67,6 +67,17 @@ class LoginView(View):
                 return render(request, "join.html", locals())
 
 
+class LogoutView(View):
+    """
+    logout view
+    """
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            auth.logout(request)
+            return redirect("/")
+
+
 class JoinView(View):
     """
     join view

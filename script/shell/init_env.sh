@@ -9,3 +9,5 @@ cd ../../
 ./manage.py migrate
 pip install -r requirements.txt
 python manage.py collectstatic -c -l --no-input
+python manage.py crontab remove
+python manage.py crontab add

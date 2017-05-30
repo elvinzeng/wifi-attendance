@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomeView, QRView
-from users.views import LoginView, AuthorizationCheckView, AuthorizeView, JoinView
+from users.views import LoginView, AuthorizationCheckView, AuthorizeView, JoinView, LogoutView
 
 urlpatterns = [
     url(r'^$', HomeView.as_view(), name="index"),
@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^authorize$', AuthorizeView.as_view(), name="authorize"),
     url(r'^check-auth$', AuthorizationCheckView.as_view(), name="checkAuthorization"),
     url(r'^join$', JoinView.as_view(), name="join"),
+    url(r'^logout$', LogoutView.as_view(), name="logout"),
     url(r'^admin/', admin.site.urls),
 ]
