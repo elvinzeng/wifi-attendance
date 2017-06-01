@@ -16,7 +16,8 @@ class OnlineHistory(models.Model):
 
     mac = models.CharField(null=False, verbose_name="MAC地址", max_length=17)
     ip = models.CharField(null=True, verbose_name="在线时的ip地址", max_length=15)
-    time = models.DateTimeField(null=False, verbose_name=u"在线记录的时间")
+    date = models.DateField(null=False, verbose_name=u"在线记录的日期")
+    time = models.TimeField(null=False, verbose_name=u"在线记录的时间")
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     class Meta:

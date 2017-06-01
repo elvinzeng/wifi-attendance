@@ -21,7 +21,7 @@ def scan_mobile():
     batch_list = []
     for i in xrange(253):
         ip = WIFI_NET_ADDR.format(i + 1)
-        batch_index = i / 15
+        batch_index = i / 10
         if len(batch_list) <= batch_index:
             batch_list.append([])
         batch_list[batch_index].append(ip)
@@ -83,6 +83,7 @@ def record_online_history(ip, mac):
         online_history.mac = mac
         online_history.ip = ip
         online_history.user = user
+        online_history.date = datetime.datetime.now()
         online_history.time = datetime.datetime.now()
         online_history.save()
     else:

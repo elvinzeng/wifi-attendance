@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+from django.db.models.aggregates import Min, Max
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
 import qrcode
 from cStringIO import StringIO
 import uuid
+
+from mobile_scanner.models import OnlineHistory
 from users.models import VerificationToken
 import datetime
 
@@ -20,7 +23,9 @@ class HomeView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            return render(request, "index.html")
+            histories = OnlineHistory.objects.filter(mac=request.user.username)\
+                .values('date').annotate(min_time=Min('time'), max_time=Max('time'))
+            return render(request, "index.html", locals())
         else:
             verification_token = str(uuid.uuid4())
             request.session["verification_token"] = verification_token

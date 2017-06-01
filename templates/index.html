@@ -9,7 +9,18 @@
         <p>hi, {{ request.user.last_name }}{{ request.user.first_name }}</p>
     {% endif %}
     <p>{{ msg }}</p>
+    <p>以下是您的考勤数据</p>
+    <ol>
+        {% for history in histories %}
+            <li>
+                日期：{{ history.date }} 最早在线时间：{{ history.min_time }} 最晚在线时间：{{ history.max_time }}
+            </li>
+        {% endfor %}
+    </ol>
+
+    {% comment %}
     <p>这里是用户主页，后续您将可以在这里看到自己的考勤数据。如果您是HR，将可以看到所有员工数据。</p>
     <p>页面开发中，尽请期待...</p>
+    {% endcomment %}
 </body>
 </html>
