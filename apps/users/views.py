@@ -107,7 +107,7 @@ class JoinView(View):
             user_profile.email = form.data["email"]
             user_profile.username = request.session["mobile_mac"]
             user_profile.password = make_password(request.session["mobile_mac"])
-            if len(hr_list) > 1:
+            if len(hr_list) > 0:
                 user_profile.is_hr = False
             else:
                 #  第一个登记的用户将默认被设置为hr
