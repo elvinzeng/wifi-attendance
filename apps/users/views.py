@@ -113,7 +113,11 @@ class JoinView(View):
                 #  第一个登记的用户将默认被设置为hr
                 user_profile.is_hr = True
             user_profile.save()
-            msg = "手机登记成功！请返回首页登录！"
+
+            # user = auth.authenticate(username=mac, password=mac)
+            auth.login(request, user_profile)
+
+            msg = "手机登记成功！3秒后将自动跳转到个人考勤记录页面。"
             timeout = 3000
             redirect_target = "/"
             return render(request, "msg.html", locals())
