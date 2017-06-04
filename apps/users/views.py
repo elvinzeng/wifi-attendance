@@ -113,8 +113,10 @@ class JoinView(View):
                 #  第一个登记的用户将默认被设置为hr
                 user_profile.is_hr = True
             user_profile.save()
-            msg = "手机登记成功！"
-            return render(request, "index.html", locals())
+            msg = "手机登记成功！请返回首页登录！"
+            timeout = 3000
+            redirect_target = "/"
+            return render(request, "msg.html", locals())
         else:
             return render(request, "join.html", locals())
 

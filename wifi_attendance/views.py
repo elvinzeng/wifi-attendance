@@ -24,7 +24,7 @@ class HomeView(View):
     def get(self, request):
         if request.user.is_authenticated():
             histories = OnlineHistory.objects.filter(mac=request.user.username)\
-                .values('date').annotate(min_time=Min('time'), max_time=Max('time'))
+                .values('date').annotate(min_time=Min('time'), max_time=Max('time')).order_by("-date")
             return render(request, "index.html", locals())
         else:
             verification_token = str(uuid.uuid4())
