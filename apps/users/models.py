@@ -14,7 +14,7 @@ class UserProfile(AbstractUser):
     user profile model
     """
 
-    is_hr = models.BooleanField(default=False, null=False, verbose_name=u'帐号是否属于HR')
+    # is_hr = models.BooleanField(default=False, null=False, verbose_name=u'帐号是否属于HR')
 
     class Meta:
         verbose_name = u"用户信息"

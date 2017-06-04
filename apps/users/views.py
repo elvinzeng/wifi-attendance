@@ -14,6 +14,8 @@ from users.form import JoinForm
 from users.models import UserProfile
 from users.models import VerificationToken
 
+from users import users_util
+
 __author__ = "Elvin Zeng"
 
 
@@ -100,19 +102,20 @@ class JoinView(View):
                 error_message = "当前操作尚未被授权"
                 return render(request, "error.html", locals())
 
-            hr_list = UserProfile.objects.filter(is_hr=True)
             user_profile = UserProfile()
             user_profile.first_name = form.data["first_name"]
             user_profile.last_name = form.data["last_name"]
             user_profile.email = form.data["email"]
             user_profile.username = request.session["mobile_mac"]
             user_profile.password = make_password(request.session["mobile_mac"])
-            if len(hr_list) > 0:
-                user_profile.is_hr = False
+            user_profile.save()
+
+            if users_util.is_hr_account_created():
+                user_profile.groups.add(users_util.staff_group())
             else:
                 #  第一个登记的用户将默认被设置为hr
-                user_profile.is_hr = True
-            user_profile.save()
+                user_profile.groups.add(users_util.staff_group())
+                user_profile.groups.add(users_util.hr_group())
 
             # user = auth.authenticate(username=mac, password=mac)
             auth.login(request, user_profile)
