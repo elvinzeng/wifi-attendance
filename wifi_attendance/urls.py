@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from .views import HomeView, QRView
+from .views import HomeView, QRView, StaffOnlineHistoryView
 from users.views import LoginView, AuthorizationCheckView, AuthorizeView, JoinView, LogoutView
 
 urlpatterns = [
@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^check-auth$', AuthorizationCheckView.as_view(), name="checkAuthorization"),
     url(r'^join$', JoinView.as_view(), name="join"),
     url(r'^logout$', LogoutView.as_view(), name="logout"),
+    url(r'^staff$', StaffOnlineHistoryView.as_view(), name="staffOnlineHistoryView"),
     url(r'^admin/', admin.site.urls),
 ]

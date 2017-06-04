@@ -9,6 +9,9 @@
         <p>hi, {{ request.user.last_name }}{{ request.user.first_name }}</p>
     {% endif %}
     <p>{{ msg }}</p>
+    {% if perms.mobile_scanner.view_staffonlinehistory %}
+        <p>您是HR，有权限查看所有的员工数据。<a href="/staff">戳这里去看所有的员工数据</a></p>
+    {% endif %}
     <p>以下是您的考勤数据</p>
     <ol>
         {% for history in histories %}

@@ -32,6 +32,21 @@ class HomeView(View):
             return render(request, "authentication.html", locals())
 
 
+class StaffOnlineHistoryView(View):
+    """
+    staff online history
+    """
+
+    def get(self, request):
+        if request.user.has_perm("mobile_scanner.view_staffonlinehistory"):
+            histories = OnlineHistory.objects.filter()\
+                .values('user__last_name', 'user__first_name', 'date').annotate(min_time=Min('time'), max_time=Max('time')).order_by("-date")
+            return render(request, "staff.html", locals())
+        else:
+            msg = "无访问权限"
+            return render(request, "msg.html", locals())
+
+
 class QRView(View):
     """
     QR Code View
