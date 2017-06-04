@@ -3,7 +3,10 @@
 import logging
 
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
+from mobile_scanner.models import OnlineHistory
 from users.models import UserProfile
 
 __author__ = "Elvin Zeng"
@@ -59,5 +62,20 @@ def staff_group():
         return staff_group_list[0]
     else:
         raise Exception("User group 'staff' not found.")
+
+
+_staff_history_view_permission_list = Permission.objects.filter(codename='view_staffonlinehistory')
+if len(_staff_history_view_permission_list) > 0:
+    logger.info("Permission 'view_staffonlinehistory' already exists.")
+else:
+    logger.info("Permission 'view_staffonlinehistory' not already exists. creating...")
+    _permission = Permission()
+    _permission.name = "查看员工在线历史"
+    _permission.codename = "view_staffonlinehistory"
+    _onlinehistory_content_type = ContentType.objects.get(app_label='mobile_scanner', model='OnlineHistory')
+    _permission.content_type = _onlinehistory_content_type
+    _permission.save()
+    hr_group().permissions.add(_permission)
+
 
 logger.info("The user system is initialized")
