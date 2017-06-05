@@ -7,12 +7,26 @@
 <body>
     <p>hi, {{ request.user.last_name }}{{ request.user.first_name }}(HR)</p>
     <p>以下是所有员工的考勤数据</p>
-    <ol>
-        {% for history in histories %}
-            <li>
-                姓名: {{ history.user__last_name }}{{ history.user__first_name }} 日期：{{ history.date }} 最早在线时间：{{ history.min_time }} 最晚在线时间：{{ history.max_time }}
-            </li>
-        {% endfor %}
-    </ol>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>日期</th>
+                <th>最早在线时间</th>
+                <th>最晚在线时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for history in histories %}
+                <tr>
+                    <td>{{ history.user__last_name }}{{ history.user__first_name }}</td>
+                    <td>{{ history.date }} </td>
+                    <td>{{ history.min_time }}</td>
+                    <td>{{ history.max_time }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>
