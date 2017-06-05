@@ -10,8 +10,8 @@
     <table border="1">
         <thead>
             <tr>
-                <th>姓名</th>
                 <th>日期</th>
+                <th>姓名</th>
                 <th>最早在线时间</th>
                 <th>最晚在线时间</th>
             </tr>
@@ -19,8 +19,8 @@
         <tbody>
             {% for history in histories %}
                 <tr>
-                    <td>{{ history.user__last_name }}{{ history.user__first_name }}</td>
                     <td>{{ history.date }} </td>
+                    <td>{{ history.user__last_name }}{{ history.user__first_name }}</td>
                     <td>{{ history.min_time }}</td>
                     <td>{{ history.max_time }}</td>
                 </tr>
